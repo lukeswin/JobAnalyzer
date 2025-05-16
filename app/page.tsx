@@ -3,6 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { LoginButton } from "@/components/LoginButton"
 import {
   Search,
   BarChart3,
@@ -48,26 +49,23 @@ export default function Home(): React.ReactElement {
             <Link href="#pricing" className="text-sm font-medium hover:text-primary">
               Pricing
             </Link>
-            <Link href="#contact" className="text-sm font-medium hover:text-primary">
-              Contact
-            </Link>
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <NavigationMenuTrigger className="text-sm font-medium hover:text-primary">
                     AI Tools
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[200px] gap-3 p-4">
+                    <ul className="grid gap-3 p-4 w-[200px]">
                       <li>
                         <NavigationMenuLink asChild>
                           <Link
                             href="/smart-cv-analysis"
                             className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                           >
-                            <div className="text-sm font-medium leading-none">Smart CV Analysis</div>
+                            <div className="text-sm font-medium leading-none">CV Analyzer</div>
                             <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Analyze your CV with AI
+                              Analyze your CV and get personalized insights
                             </p>
                           </Link>
                         </NavigationMenuLink>
@@ -90,53 +88,28 @@ export default function Home(): React.ReactElement {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
+            <LoginButton />
           </nav>
-
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="hidden md:block text-sm font-medium hover:text-primary">
-              Log in
-            </Link>
-            <Button>Get Started</Button>
-          </div>
         </div>
       </header>
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-12 md:py-24 lg:py-32 xl:py-36">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:grid-cols-2">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                    Find Your Perfect Job Match with AI
-                  </h1>
-                  <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Upload your CV and let our AI match you with the perfect job opportunities based on your skills,
-                    experience, and preferences.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button size="lg" className="gap-1.5">
-                    Upload Your CV
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button size="lg" variant="outline">
-                    Learn More
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-center justify-center">
-                <div className="relative h-[350px] w-[350px] md:h-[450px] md:w-[450px]">
-                  <Image
-                    src="/placeholder.svg?height=450&width=450"
-                    alt="Job Matching Illustration"
-                    fill
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-              </div>
+        <section className="container py-12 md:py-24 lg:py-32">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+              Smart CV Analysis & Job Recommendations
+            </h1>
+            <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              Get AI-powered insights on your CV and discover the perfect job matches.
+            </p>
+            <div className="flex gap-4">
+              <Button asChild>
+                <Link href="/dashboard">Get Started</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="#features">Learn More</Link>
+              </Button>
             </div>
           </div>
         </section>

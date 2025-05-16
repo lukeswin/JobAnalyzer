@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# PDF Component Guide
+
+The [PDFComponent.tsx](mdc:app/smart-cv-analysis/PDFComponent.tsx) is a React component that handles PDF file uploads and text extraction. Here's how it works:
+
+## State Management
+- `file`: Stores the selected PDF file
+- `isLoading`: Tracks the upload/extraction process
+- `error`: Handles error messages
+- `extractedText`: Stores the extracted text from the PDF
+
+## Key Functions
+1. `handleFileChange`: Validates and sets the selected PDF file
+2. `handleUpload`: Handles the file upload and text extraction process
+
+## API Integration
+The component communicates with `/api/extract-pdf` endpoint to process PDFs. The endpoint expects:
+- Method: POST
+- Body: FormData with a 'file' field containing the PDF
+
+## UI Elements
+- File input for PDF selection
+- Upload button with loading state
+- Error message display
+- Extracted text display area
+
+## Error Handling
+The component handles various error cases:
+- Invalid file type (non-PDF)
+- Upload failures
+- API processing errors

@@ -1,15 +1,14 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Smart CV Analyzer",
-  description: "Analyze your CV with AI",
-  generator: 'v0.dev'
-}
+  title: 'Your App',
+  description: 'Your app description',
+};
 
 export default function RootLayout({
   children,
@@ -17,12 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
-        {children}
+    <html lang="en">
+      <body className={inter.className}>
+        <UserProvider>
+          {children}
+        </UserProvider>
       </body>
     </html>
-  )
+  );
 }
 
 

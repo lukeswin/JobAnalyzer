@@ -1,0 +1,35 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# UI Components Guide
+
+The project uses a set of reusable UI components located in the `components/ui` directory. These components are built using a modern design system.
+
+## Core Components
+- `Button`: A versatile button component with various states (default, loading, disabled)
+- `Input`: Form input component with support for different types
+- `NavigationMenu`: Complex navigation component with dropdown support
+
+## Component Usage
+The components are styled using Tailwind CSS and follow a consistent design pattern. They support:
+- Dark/light mode
+- Responsive design
+- Accessibility features
+- Loading states
+- Error states
+
+## Navigation Structure
+The application uses a consistent navigation pattern:
+- Sticky header with logo
+- Main navigation links
+- Dropdown menu for AI tools
+- Mobile-responsive design
+
+## Design System
+The UI follows these design principles:
+- Clean and minimal interface
+- Consistent spacing and typography
+- Clear visual hierarchy
+- Interactive feedback on user actions
