@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Search, Briefcase, MapPin, DollarSign, Building2, Calendar, Loader2 } from "lucide-react"
+import { Search, Briefcase, MapPin, DollarSign, Building2, Calendar, Loader2, Linkedin, ChevronDown, ChevronUp } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { useState } from "react"
-import { Job } from "@/lib/mock-jobs"
+import { Job } from "@/lib/db"
 import Link from "next/link"
 import {
   NavigationMenu,
@@ -20,6 +20,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
+import { LocationCombobox } from "@/components/ui/combobox"
 
 const formSchema = z.object({
   skills: z.string().optional(),
@@ -33,6 +34,19 @@ export default function JobRecommender() {
   const [isLoading, setIsLoading] = useState(false)
   const [recommendedJobs, setRecommendedJobs] = useState<Job[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [expandedJobs, setExpandedJobs] = useState<Set<string>>(new Set())
+
+  const toggleJobDescription = (jobId: string) => {
+    setExpandedJobs(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(jobId)) {
+        newSet.delete(jobId)
+      } else {
+        newSet.add(jobId)
+      }
+      return newSet
+    })
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -207,11 +221,12 @@ export default function JobRecommender() {
                         <FormLabel>Preferred Location</FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                            <Input
+                            <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500 z-10" />
+                            <LocationCombobox
+                              value={field.value}
+                              onChange={field.onChange}
                               placeholder="Enter preferred location"
                               className="pl-10"
-                              {...field}
                             />
                           </div>
                         </FormControl>
@@ -287,17 +302,17 @@ export default function JobRecommender() {
                   <div className="grid gap-6">
                     {recommendedJobs.map((job) => (
                       <div
-                        key={job.id}
+                        key={job.job_id}
                         className="rounded-lg border bg-card p-6 shadow-sm"
                       >
                         <div className="flex items-start justify-between">
-                          <div>
+                          <div className="space-y-2">
                             <h3 className="text-xl font-semibold">{job.title}</h3>
-                            <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
-                              <div className="flex items-center gap-1">
-                                <Building2 className="h-4 w-4" />
-                                {job.company}
-                              </div>
+                            <div className="flex items-center gap-2">
+                              <Building2 className="h-5 w-5 text-primary" />
+                              <span className="text-lg font-medium text-primary">{job.company}</span>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                               <div className="flex items-center gap-1">
                                 <MapPin className="h-4 w-4" />
                                 {job.location}
