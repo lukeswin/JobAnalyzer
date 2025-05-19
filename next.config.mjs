@@ -22,7 +22,7 @@ const nextConfig = {
     // Add alias for pdfjs-dist
     config.resolve.alias = {
       ...config.resolve.alias,
-      'pdfjs-dist': 'pdfjs-dist/legacy/build/pdf',
+      'pdfjs-dist': 'pdfjs-dist/build/pdf',
     };
 
     return config;
