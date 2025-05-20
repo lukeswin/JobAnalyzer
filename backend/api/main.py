@@ -1,97 +1,60 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from cv_analyzer import CVAnalyzer
 from pydantic import BaseModel
-import logging
-import gc
-import sys
-import traceback
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from typing import List, Optional
+from datetime import datetime
+from .resume_parser import parse_resume, Experience as ResumeExperience
 
 app = FastAPI()
 
-# Add CORS middleware with more specific configuration
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Your Next.js frontend URL
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"]
 )
 
-# Initialize analyzer
-try:
-    analyzer = CVAnalyzer()
-except Exception as e:
-    logger.error(f"Failed to initialize CVAnalyzer: {str(e)}")
-    sys.exit(1)
+class Experience(BaseModel):
+    job_title: str
+    company: str
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    duration_years: Optional[float] = None
 
-class TextAnalysisRequest(BaseModel):
+class ResumeRequest(BaseModel):
     text: str
 
-@app.post("/analyze-cv")
-async def analyze_cv(request: TextAnalysisRequest):
+class ResumeResponse(BaseModel):
+    id: int
+    experiences: List[Experience]
+    skills: List[str]
+    created_at: str
+
+@app.post("/api/resumes", response_model=ResumeResponse)
+async def create_resume(request: ResumeRequest):
     try:
-        # Check text length
-        if len(request.text) > 1000000:  # 1MB limit
-            raise HTTPException(status_code=400, detail="Text too long. Maximum size is 1MB.")
-            
-        if not request.text.strip():
-            raise HTTPException(status_code=400, detail="Empty text provided.")
-            
-        # Analyze the text
-        try:
-            result = analyzer.analyze_text(request.text)
-        except Exception as e:
-            logger.error(f"Error during text analysis: {str(e)}")
-            logger.error(traceback.format_exc())
-            raise HTTPException(
-                status_code=500,
-                detail="Error analyzing text. Please try again."
-            )
-        
-        # Force garbage collection after analysis
-        gc.collect()
+        # Parse the resume text using the existing parser
+        parsed_data = parse_resume(request.text)
         
         return {
-            "success": True,
-            "data": result
+            "id": 1,  # You might want to generate a unique ID
+            "experiences": [
+                Experience(
+                    job_title=exp.job_title,
+                    company=exp.company,
+                    start_date=exp.start_date,
+                    end_date=exp.end_date,
+                    duration_years=exp.duration_years
+                ) for exp in parsed_data.experiences
+            ],
+            "skills": parsed_data.skills,
+            "created_at": datetime.now().isoformat()
         }
-    except HTTPException as he:
-        logger.error(f"HTTP error: {str(he)}")
-        raise he
     except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
-        logger.error(traceback.format_exc())
-        raise HTTPException(
-            status_code=500,
-            detail="An unexpected error occurred. Please try again."
-        )
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/health")
-async def health_check():
-    try:
-        # Test analyzer is working
-        test_text = "Test CV analysis"
-        analyzer.analyze_text(test_text)
-        return {"status": "healthy"}
-    except Exception as e:
-        logger.error(f"Health check failed: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail="Service is unhealthy"
-        )
-
-# Cleanup on shutdown
-@app.on_event("shutdown")
-async def shutdown_event():
-    try:
-        if 'analyzer' in globals():
-            del analyzer
-        gc.collect()
-    except Exception as e:
-        logger.error(f"Error during shutdown: {str(e)}") 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000) 

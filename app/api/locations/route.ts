@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getUniqueLocations } from '@/lib/db';
+import { getUniqueLocations } from '@/app/lib/db';
 
 export async function GET(request: Request) {
   console.log('API route: Starting locations request');

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { searchJobs, Job } from "@/lib/db"
+import { searchJobs, Job } from "@/app/lib/db"
 
 interface JobSearchParams {
   skills?: string

@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { LoginButton } from "@/components/LoginButton"
+import { Button } from "../components/ui/button"
+import { LoginButton } from "../components/LoginButton"
 import {
   Search,
   BarChart3,
@@ -24,7 +24,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
+} from "../components/ui/navigation-menu"
 
 export default function Home(): React.ReactElement {
   return (

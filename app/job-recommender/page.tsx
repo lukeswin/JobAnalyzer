@@ -1,16 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { Input } from "../../components/ui/input"
+import { Textarea } from "../../components/ui/textarea"
 import { Search, Briefcase, MapPin, DollarSign, Building2, Calendar, Loader2, Linkedin, ChevronDown, ChevronUp } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form"
 import { useState } from "react"
-import { Job } from "@/lib/db"
+import { Job } from "@/app/lib/db"
 import Link from "next/link"
 import {
   NavigationMenu,
